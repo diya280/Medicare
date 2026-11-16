@@ -73,7 +73,6 @@ export class ViewpostComponent implements OnInit {
     })
   }
 
-  BASE_URL = 'http://localhost:8080';
 
   getMedicineDetails() {
     const data = {

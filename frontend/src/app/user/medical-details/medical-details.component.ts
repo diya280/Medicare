@@ -34,7 +34,7 @@ export class MedicalDetailsComponent implements OnInit {
 
   userDetails: any;
   filteredMedicineData: any[] = [];
-  BASE_URL = 'http://localhost:8080';
+ 
 
   getLoginUser(): void {
     this.authService.getLoginUser().subscribe((res: any) => {

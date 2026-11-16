@@ -22,7 +22,7 @@ export class ViewareaComponent {
   selectedTab: string = 'medicine';
   medicalData: any[] = [];
   medicalId: any;
-  BASE_URL = 'http://localhost:8080';
+ 
 
 
 

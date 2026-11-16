@@ -23,7 +23,6 @@ export class MedicalareaComponent implements OnInit {
 
 
   filteredMedicineData: any[] = [];
-  BASE_URL = 'http://localhost:8080';  
   defaultImage = 'assets/medicare_logo/medicine.png';
   expandedDesc: { [key: number]: boolean } = {};
 

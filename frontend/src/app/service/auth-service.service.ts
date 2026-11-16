@@ -10,7 +10,7 @@ export class AuthServiceService {
   // <---------------------------- Backend api calls ------------------------------->
 
   constructor(private http: HttpClient) { }
-  apiUrlString: string = 'http://localhost:8080/api';
+  apiUrlString: string = 'https://medicare-f9lb.onrender.com/api';
 
 
   signupUser(data: any): Observable<any> {
@@ -166,6 +166,6 @@ export class AuthServiceService {
   }
 
 
-  
+
 
 }

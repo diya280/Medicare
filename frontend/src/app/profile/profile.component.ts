@@ -209,7 +209,7 @@ export class ProfileComponent implements OnInit {
   isImgUploaded: boolean = false;
   uploadedImages: any;
 
-  BASE_URL = 'http://localhost:8080';
+ 
 
   getUploadImages() {
     const data = {
