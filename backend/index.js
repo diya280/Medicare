@@ -24,11 +24,21 @@ app.use('/api', userRoutes);
 
 const jwtSecret = process.env.JWT_SECRET;
 
-const port = process.env.PORT || 8080;
-app.listen(port, function (err) {
-    if (err) {
-        console.error('Server connection failed:', err);
-    } else {
-        console.log('Server connection established on port -', port);
+
+const PORT = process.env.PORT || 8080;
+
+async function startServer() {
+    try {
+        await require('./conn')();
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error('Server startup failed:', error);
+        process.exit(1);
     }
-});
+}
+
+startServer();
+
