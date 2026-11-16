@@ -1,0 +1,54 @@
+<div class="relative min-h-screen bg-gradient-to-r from-green-400 to-blue-500 text-white p-6">
+
+  <div class="absolute top-4 left-4 right-4 flex justify-between items-center" style="margin-top: -40px;">
+
+     <div class="flex items-center">
+      <img src="assets/medicare_logo/medicare_logo.png" alt="Medicare Logo"
+        class="w-[150px] h-[150px] object-contain drop-shadow-md" />
+    </div> 
+
+
+    <div class="flex flex-col md:flex-row gap-3 md:gap-4 items-center">
+      <button (click)="openLoginModal()"
+        class="login-btn flex items-center gap-2 px-3 py-1 rounded-4 font-semibold transition-all duration-300 border-2 border-white hover:bg-white hover:text-blue-600">
+        <i class="bi bi-box-arrow-in-right"></i> Login
+      </button>
+
+      <button (click)="openSignupModal()"
+        class="signup-btn flex items-center gap-2 px-3 py-1 rounded-4 font-semibold transition-all duration-300 border-2 border-white hover:bg-white hover:text-green-600">
+        <i class="bi bi-pencil-square"></i> Signup
+      </button>
+    </div>
+
+  </div>
+
+  <div class="text-center mt-20 mb-12 animate-fadeInDown">
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Welcome to Medicare</h1>
+    <p class="text-lg md:text-2xl">Your trusted platform for medicines & healthcare services</p>
+  </div>
+
+  <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch w-full max-w-6xl mx-auto animate-fadeInUp">
+
+    <div class="entity-card flex-1 bg-white text-gray-800 p-8 relative">
+      <h2 class="text-2xl font-bold mb-4">User</h2>
+      <p class="mb-6">
+        Individuals who can access the Medicare platform to purchase medicines or share feedback about their user
+        experience.
+      </p>
+    </div>
+
+    <div class="entity-card flex-1 bg-white text-gray-800 p-8 relative">
+      <h2 class="text-2xl font-bold mb-4">Medical Store</h2>
+      <p class="mb-6">
+        Pharmacy owners or medical store representatives who can register their stores, provide online services, and
+        sell medicines through the platform.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="mt-12 animate-fadeInUp text-center">
+    <p class="text-white/90">Start your journey with Medicare today!</p>
+  </div>
+
+</div>

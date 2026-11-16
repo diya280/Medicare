@@ -1,0 +1,18 @@
+<header class="w-full sticky top-0 z-50 bg-white">
+    <div class="px-2 py-1 flex items-center justify-between">
+
+        <div class="flex items-center gap-3">
+            <img src="assets/medicare_logo/medicare_logo.png" class="h-20 w-20 object-contain" />
+        </div>
+
+        <div class="flex items-center gap-3 p-1 rounded-lg hover:bg-gray-100 transition cursor-pointer"
+            (click)="openProfileModal()">
+            <p class="text-dark fs-6 m-0">
+                {{ loginUserData?.fullName | titlecase }}
+            </p>
+            <i class="bi bi-person-circle text-3xl text-dark-700"></i>
+        </div>
+
+
+    </div>
+</header>

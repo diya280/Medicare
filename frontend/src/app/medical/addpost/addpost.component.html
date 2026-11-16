@@ -1,0 +1,104 @@
+<div id="addpost_area" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div
+        class="bg-white w-[90%] sm:w-[650px] max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl p-6 sm:p-8 relative animate-fadeIn">
+
+        <button type="button" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl"
+            (click)="closeModal()">
+            &times;
+        </button>
+
+        <div class="flex justify-start items-center" style="gap: 120px">
+            <img src="assets/medicare_logo/medicare_logo.png" class="w-24 h-24 object-contain drop-shadow-md" />
+            <h3 class="font-bold text-2xl">Add Medicine</h3>
+        </div>
+
+        <form [formGroup]="medicineForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Medicine Name</label>
+                    <input type="text" formControlName="name"
+                        class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        [ngClass]="isInvalid('name') ? 'border-red-500' : 'border-gray-300'"
+                        placeholder="Enter medicine name" />
+                    <p *ngIf="isInvalid('name')" class="text-red-600 text-sm mt-1">{{ getError('name') }}</p>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Quantity in Stock</label>
+
+                    <input type="text" formControlName="quantityInStock"
+                        class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        placeholder="Enter quantity"
+                        [ngClass]="isInvalid('quantityInStock') ? 'border-red-500' : 'border-gray-300'" maxlength="5"
+                        (keypress)="allowOnlyNumbers($event)" />
+
+                    <p *ngIf="isInvalid('quantityInStock')" class="text-red-600 text-sm mt-1">
+                        {{ getError('quantityInStock') }}
+                    </p>
+                </div>
+
+
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Description</label>
+                <textarea rows="3" formControlName="description"
+                    class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                    placeholder="Enter description"
+                    [ngClass]="isInvalid('description') ? 'border-red-500' : 'border-gray-300'"></textarea>
+                <p *ngIf="isInvalid('description')" class="text-red-600 text-sm mt-1">{{ getError('description') }}</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Price per piece</label>
+                    <input type="number" formControlName="price"
+                        class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        [ngClass]="isInvalid('price') ? 'border-red-500' : 'border-gray-300'"
+                        placeholder="Enter price/piece" />
+                    <p *ngIf="isInvalid('price')" class="text-red-600 text-sm mt-1">{{ getError('price') }}</p>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-gray-700 font-medium">Available to Deliver</label>
+                    <select formControlName="availableToDispatch"
+                        class="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option [ngValue]="true">Yes</option>
+                        <option [ngValue]="false">No</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Upload Photos</label>
+
+                <div (click)="fileInput.click()"
+                    class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:bg-gray-50 transition">
+                    <p class="text-gray-500">Click to upload or drag & drop</p>
+                    <p class="text-xs text-gray-400">You can upload multiple images</p>
+                    <input #fileInput type="file" multiple class="hidden" (change)="onMultipleFilesSelected($event)" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div *ngFor="let img of previewImages" class="relative group">
+                    <img [src]="img" class="rounded-1 border w-full h-28 object-cover shadow-sm" />
+                    <button type="button" (click)="removeImage(img)"
+                        class="absolute top-1 right-1 bg-white rounded-md p-1 shadow text-red-600 hover:bg-red-600 hover:text-white transition">
+                        ✕
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" [disabled]="medicineForm.invalid"
+                class="w-full py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
+                Add Medicine
+            </button>
+
+        </form>
+    </div>
+</div>

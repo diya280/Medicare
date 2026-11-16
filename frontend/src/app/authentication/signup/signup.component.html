@@ -1,0 +1,189 @@
+<div id="signup_area" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div
+    class="bg-white w-[90%] sm:w-[900px] max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl p-6 sm:p-8 relative animate-fadeIn">
+    <button type="button" (click)="closeModal()"
+      class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+
+    <div class="flex justify-center" style="margin-top: -20px;">
+      <img src="assets/medicare_logo/medicare_logo.png" alt="Medicare Logo"
+        class="w-24 h-24 sm:w-28 sm:h-28 object-contain drop-shadow-md" />
+    </div>
+
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-center text-gray-800">Create Account</h2>
+
+    <form [formGroup]="signupForm" class="space-y-4">'
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-medium mb-1">Full Name</label>
+          <input formControlName="fullName" type="text"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <div *ngIf="f['fullName'].touched && f['fullName'].invalid" class="text-red-500 text-sm">
+            Full name is required
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Contact</label>
+          <input formControlName="contact" (input)="limitLength($event, 'contact')" [maxlength]="10"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <div *ngIf="f['contact'].touched && f['contact'].invalid" class="text-red-500 text-sm">
+            Enter a valid 10-digit contact number
+          </div>
+        </div>
+      </div>
+
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-medium mb-1">Password</label>
+          <div class="relative">
+            <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+              class="w-full px-4 py-2 pr-10 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <button type="button" (click)="togglePasswordVisibility()"
+              class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-800">
+              <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="f['password'].touched && f['password'].invalid" class="text-red-500 text-sm">
+            Please enter strong password here
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Confirm Password</label>
+          <div class="relative">
+            <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword"
+              class="w-full px-4 py-2 pr-10 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <button type="button" (click)="toggleConfirmPasswordVisibility()"
+              class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-800">
+              <i class="fa" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-medium mb-1">Email</label>
+          <input formControlName="email" type="email"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <div *ngIf="f['email'].touched && f['email'].invalid" class="text-red-500 text-sm">
+            Enter a valid email address
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">State</label>
+          <input formControlName="state" type="text"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <div *ngIf="f['state'].touched && f['state'].invalid" class="text-red-500 text-sm">
+            Please select state 
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div>
+          <label class="block font-medium mb-1">City</label>
+          <input formControlName="city" type="text"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <div *ngIf="f['city'].touched && f['city'].invalid" class="text-red-500 text-sm">
+            Please enter city
+          </div>
+        </div>
+        <div>
+          <label class="block font-medium mb-1">District</label>
+          <input formControlName="district" type="text"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <div *ngIf="f['district'].touched && f['district'].invalid" class="text-red-500 text-sm">
+            Please select district
+          </div>
+        </div>
+        
+        <div>
+          <label class="block font-medium mb-1">Pincode</label>
+          <input formControlName="pincode" type="number" [maxlength]="6" (input)="limitLength($event,'pincode')"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <div *ngIf="f['pincode'].touched && f['pincode'].invalid" class="text-red-500 text-sm">
+            Enter a valid 6-digit pincode
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-medium mb-1">Address</label>
+          <input formControlName="streetAddress" type="text"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <div *ngIf="f['streetAddress'].touched && f['streetAddress'].invalid" class="text-red-500 text-sm">
+            Enter your street address
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Role</label>
+          <select formControlName="role" (change)="onRoleChange()"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <option value="">Select Role</option>
+            <option value="user">User</option>
+            <option value="medical">Medical</option>
+          </select>
+          <div *ngIf="f['role'].touched && f['role'].invalid" class="text-red-500 text-sm">
+             select the role
+          </div>
+        </div>
+
+      </div>
+
+
+      <div *ngIf="showMedicalFields" class="space-y-3 mt-3 border-t pt-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium mb-1">Medical Name</label>
+            <input formControlName="medicalName" type="text"
+              class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1">Medical Address</label>
+            <input formControlName="medicalAddress" type="text"
+              class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          </div>
+        </div>
+
+
+        <div class="flex items-center gap-2">
+          <input id="delivery" type="checkbox" formControlName="canDeliver" class="w-5 h-5 text-blue-600" />
+          <label for="delivery" class="font-medium text-gray-700">Able to do delivery</label>
+        </div>
+      </div>
+
+      <div class="pt-1">
+        <button type="submit" (click)="onSubmit()"
+          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-300">
+          Sign Up
+        </button>
+      </div>
+    </form>
+
+    <!-- <div class="my-2 flex items-center justify-center">
+      <div class="border-t border-gray-300 w-1/4"></div>
+      <span class="mx-2 text-gray-500 text-sm">or</span>
+      <div class="border-t border-gray-300 w-1/4"></div>
+    </div> -->
+
+    <!-- <p class="text-center text-gray-700 text-sm mb-1">
+      Already have an account?
+      <a href="#" class="text-blue-600 font-semibold hover:underline" (click)="openLogin()">Login</a>
+    </p> -->
+
+
+
+  </div>
+</div>

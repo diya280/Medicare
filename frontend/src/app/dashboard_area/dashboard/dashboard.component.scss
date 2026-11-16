@@ -1,0 +1,51 @@
+/* Animations */
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-50px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(50px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeInDown { animation: fadeInDown 1s ease-out forwards; }
+.animate-fadeInUp { animation: fadeInUp 1s ease-out forwards; }
+
+.entity-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: transform 0.5s;
+}
+.entity-card:hover { transform: scale(1.05); }
+.entity-card::before {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  top: -10%;
+  left: -10%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(0,0,0,0));
+  transform: rotate(25deg);
+  z-index: 0;
+}
+
+
+/* Icon Styling (Bootstrap Icons) */
+.bi {
+  font-size: 1.1rem;
+}
+
+
+.login-btn:hover{
+  background-color: white;
+  color: #03033c !important;
+}
+
+
+.signup-btn:hover{
+  background-color: white;
+  color: #03033c !important;
+}
+

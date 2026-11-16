@@ -1,0 +1,144 @@
+<div class="container mt-4">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 custom-header">
+
+        <ul class="nav nav-tabs custom-tabs mb-2 mb-md-0">
+            <li class="nav-item">
+                <a class="nav-link " [class.active]="selectedTab === 'Medical'" (click)="onSelectedTab('Medical')">
+                    Medical
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="selectedTab === 'User'" (click)="onSelectedTab('User')">
+                    Users
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <div class="tab-content">
+        <div *ngIf="selectedTab === 'Medical'" class="medical-table-wrapper">
+
+            <div class="table-header">
+                <h5 class="title">Medical Records</h5>
+                <input type="text" class="search-input" (input)="onSearchMedical()" placeholder="Search medical..."
+                    [(ngModel)]="searchTextMedical">
+            </div>
+
+            <div class="table-responsive">
+                <table class="table medical-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Medical Name</th>
+                            <th>Address</th>
+                            <th> Email</th>
+                            <th>Contact</th>
+                            <!-- <th>Status</th> -->
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let item of filteredMedicalData; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td class="fw-semibold">{{ item.medicalName | titlecase }}
+                                <br /> <span class="fw-normal text-secondary" style="font-size: 13px !important;">
+                                    {{item.fullName | titlecase}}</span>
+                            </td>
+                            <td> {{item.email}} </td>
+                            <td>{{ item.medicalAddress | titlecase}}</td>
+                            <td>{{ item.contact }}</td>
+                            <!-- 
+                            <td>
+                                <span class="status-badge" [ngClass]="{
+                    'pending': item.status === 'Pending',
+                    'accept': item.status === 'Accept',
+                    'reject': item.status === 'Reject',
+                    'deliver': item.status === 'Deliver'
+                  }">
+                                    {{ item.status }}
+                                </span> 
+                            </td>-->
+
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-success" (click)="openMedicalDetails(item)">
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="filteredMedicalData && filteredMedicalData.length === 0">
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No medical records found
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+         <div *ngIf="selectedTab === 'User'" class="medical-table-wrapper">
+
+            <div class="table-header">
+                <h5 class="title">User Records</h5>
+                <input type="text" class="search-input" (input)="onSearchUser()" placeholder="Search user..."
+                    [(ngModel)]="searchTextUser">
+            </div>
+
+            <div class="table-responsive">
+                <table class="table medical-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Full Name</th>
+                            <th>Address</th>
+                            <th> Email</th>
+                            <th>Contact</th>
+                            <!-- <th>Status</th> -->
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let item of filteredUserData; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td class="fw-semibold">{{ item.fullName | titlecase }}</td>
+                            <td> {{item.email}} </td>
+                            <td>{{ item.address?.streetAddress | titlecase}}, <br/>
+                                 {{ item.address?.city | titlecase}}, {{ item.address?.district | titlecase}} - {{ item.address?.pincode}}</td>
+                            <td>{{ item.contact }}</td>
+                            <!-- 
+                            <td>
+                                <span class="status-badge" [ngClass]="{
+                    'pending': item.status === 'Pending',
+                    'accept': item.status === 'Accept',
+                    'reject': item.status === 'Reject',
+                    'deliver': item.status === 'Deliver'
+                  }">
+                                    {{ item.status }}
+                                </span> 
+                            </td>-->
+
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-success" (click)="openUserDetails(item)">
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="filteredUserData && filteredUserData.length === 0">
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No user records found
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

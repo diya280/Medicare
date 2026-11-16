@@ -1,0 +1,127 @@
+
+// --------------------------------------------------------
+
+
+.umc-card-wrapper {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+.umc-card-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Header */
+.umc-card-header {
+  background: #f8f9fa;
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.umc-medicine-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Body */
+.umc-card-body {
+  padding: 14px;
+  flex-grow: 1;
+  font-size: 0.9rem;
+}
+
+.umc-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.umc-label {
+  color: #6c757d;
+}
+
+.umc-value {
+  font-weight: 600;
+}
+
+.umc-price {
+  color: #28a745;
+}
+
+.umc-divider {
+  height: 1px;
+  background: #eaeaea;
+  margin: 10px 0;
+}
+
+/* Medical Info */
+.umc-medical-name {
+  font-weight: 600;
+  margin-top: 8px;
+  color: #343a40;
+}
+
+.umc-medical-address {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+/* Footer */
+.umc-card-footer {
+  padding: 12px 14px;
+  background: #f8f9fa;
+  border-top: 1px solid #eaeaea;
+}
+
+.umc-contact-row {
+  font-size: 0.85rem;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.umc-footer-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.umc-footer-value {
+  color: #343a40;
+}
+
+
+// --------------------------------------
+
+
+
+
+.status-pending {
+  color: #e53935; /* red */
+  font-weight: 600;
+}
+
+.status-reject {
+  color: #4c0504; /* red */
+  font-weight: 600;
+}
+
+.status-accepted {
+  color: #2e7d32; /* green */
+  font-weight: 600;
+}
+
+.status-delivered {
+  color: #1b5e20; /* dark green */
+  font-weight: 600;
+}
+

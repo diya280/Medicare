@@ -1,0 +1,340 @@
+.card {
+  border-radius: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.1);
+}
+
+
+.card-img-top {
+  height: 180px;
+  object-fit: cover;
+}
+
+
+.section-title {
+  text-align: center;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.add-card {
+  padding: 40px 20px;
+  border: 2px dashed #0d6efd;
+  border-radius: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: #f8fbff;
+}
+
+.add-card:hover {
+  background: #e7f1ff;
+  border-color: #0a58ca;
+  transform: translateY(-4px);
+}
+
+.add-btn {
+  // background: #0d6efd;
+  color: white;
+  font-size: 17px;
+  padding: 12px 18px;
+  width: 100%;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  // background: #0b5ed7;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.custom-tabs .nav-link {
+  border: none;
+  padding: 10px 18px;
+  font-weight: 600;
+  color: #555;
+  border-radius: 8px;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.custom-tabs .nav-link:hover {
+  background: #f1f1f1;
+}
+
+.custom-tabs .nav-link.active {
+    background: linear-gradient(to right, #4ade80, #3b82f6);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff !important;
+    border-radius: 8px;;
+}
+
+
+.add-btn1 {
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 8px;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.custom-header {
+  gap: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+// --------------------------------------------
+
+
+
+
+.medicine-card-simple {
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 12px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.medicine-img-box {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.medicine-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.medicine-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-align: start;
+  color: #222;
+}
+
+.medicine-desc {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.4;
+  text-align: start;
+  min-height: 38px;
+  margin-bottom: 6px;
+}
+
+.show-more-btn {
+  font-size: 0.8rem;
+  color: #007bff;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.show-more-btn:hover {
+  text-decoration: underline;
+}
+
+.medicine-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.stock {
+  color: #333;
+}
+
+.status.available {
+  color: #0f8c0f;
+  font-weight: 500;
+}
+
+.status.not-available {
+  color: #c00;
+  font-weight: 500;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: #777;
+  text-align: center;
+  margin-top: 6px;
+}
+
+
+
+
+
+
+
+
+
+
+// ------------------------------------------------
+
+
+
+
+.umc-card-wrapper {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+.umc-card-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Header */
+.umc-card-header {
+  background: #f8f9fa;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.umc-medicine-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Body */
+.umc-card-body {
+  padding: 14px;
+  flex-grow: 1;
+  font-size: 0.9rem;
+}
+
+.umc-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.umc-label {
+  color: #6c757d;
+}
+
+.umc-value {
+  font-weight: 600;
+}
+
+.umc-price {
+  color: #28a745;
+}
+
+.umc-divider {
+  height: 1px;
+  background: #eaeaea;
+  margin: 10px 0;
+}
+
+/* Medical Info */
+.umc-medical-name {
+  font-weight: 600;
+  margin-top: 8px;
+  color: #343a40;
+}
+
+.umc-medical-address {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+/* Footer */
+.umc-card-footer {
+  padding: 12px 14px;
+  background: #f8f9fa;
+  border-top: 1px solid #eaeaea;
+}
+
+.umc-contact-row {
+  font-size: 0.85rem;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.umc-footer-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.umc-footer-value {
+  color: #343a40;
+}
+
+
+
+// --------------------------------------
+
+
+
+
+.status-pending {
+  color: #e53935; /* red */
+  font-weight: 600;
+}
+
+.status-reject {
+  color: #4c0504; /* red */
+  font-weight: 600;
+}
+
+.status-accepted {
+  color: #2e7d32; /* green */
+  font-weight: 600;
+}
+
+.status-delivered {
+  color: #1b5e20; /* dark green */
+  font-weight: 600;
+}
+
+
+
+
+

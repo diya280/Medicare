@@ -1,0 +1,625 @@
+<div class="container mt-4">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 custom-header">
+        <ul class="nav nav-tabs custom-tabs mb-2 mb-md-0">
+            <li class="nav-item">
+                <a class="nav-link " [class.active]="selectedTab === 'medicine'" (click)="onSelectedTab('medicine')">
+                    Medicine Area
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " [class.active]="selectedTab === 'mine'" (click)="onSelectedTab('mine')">
+                    Medical Near Me
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="selectedTab === 'others'" (click)="onSelectedTab('others')">
+                    All Medicals
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="isDisplayOrder">
+                <a class="nav-link" [class.active]="selectedTab === 'order'" (click)="onSelectedTab('order')">
+                    Orders
+                </a>
+            </li>
+        </ul>
+
+        <div class="search-box mt-2 mt-md-0" *ngIf="selectedTab === 'medicine'">
+            <input type="text" class="form-control" placeholder="Search medicine..." [(ngModel)]="searchText"
+                (input)="onSearch()" />
+        </div>
+    </div>
+
+    <div class="tab-content">
+
+        <div *ngIf="selectedTab === 'medicine'">
+
+            <div class="text-center text-secondary mt-4"
+                *ngIf="filteredMedicineData && filteredMedicineData.length === 0">
+                No medical available.
+            </div>
+
+            <div class="container py-3">
+                <div class="row g-3">
+
+                    <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let item of filteredMedicineData; let i = index;">
+                        <div class="medicine-card-simple h-100" (click)="viewMedicineDetails(item)">
+                            <div class="medicine-img-box">
+                                <img [src]="item.images[1]?.fullUrl" (error)="onImgError($event)" alt="medicine" />
+                            </div>
+                            <h5 class="medicine-name">{{ item.name | titlecase}}</h5>
+                            <p class="medicine-desc">
+                                <span *ngIf="!expandedDesc[i]">
+                                    {{ getShortText(item.description) }}
+                                </span>
+
+                                <span *ngIf="expandedDesc[i]">
+                                    {{ item.description }}
+                                </span>
+                            </p>
+                            <button class="show-more-btn" *ngIf="isDescriptionLong(item.description)"
+                                (click)="toggleDescription(i)">
+                                {{ expandedDesc[i] ? 'Show Less' : 'Show More' }}
+                            </button>
+
+                            <div class="medicine-info">
+                                <span class="stock">Stock: {{ item.quantityInStock }}
+                                    <br />&#8377; {{item?.price}}/Piece
+                                </span>
+
+                                <span class="status"
+                                    [ngClass]="item.availableToDispatch ? 'available' : 'not-available'">
+                                    {{ item.availableToDispatch ? 'Available to deliver' : 'Not Available to deliver' }}
+                                </span>
+                            </div>
+                            <div class="footer-text">
+                                Added on: {{ item.createdAt | date:'MMM d, y' }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="selectedTab === 'mine'">
+
+            <div class="text-center text-secondary mt-4" *ngIf="medicalData && medicalData.length === 0">
+                No medical available.
+            </div>
+
+            <div class="container py-3">
+                <div class="row g-3">
+
+                    <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let item of medicalData; let i = index">
+                        <div class="medicine-card-simple h-100" (click)="openMedicalDetails(item)">
+
+                            <div class="medicine-img-box medical-img-container">
+                                <img [src]="item.images[0]?.fullUrl" (error)="onImgError($event)" alt="medical" />
+                            </div>
+
+                            <h5 class="medicine-name fw-bold">{{ item.medicalName | titlecase }}</h5>
+
+                            <p class="medicine-desc fw-normal">
+                                {{ item.address.streetAddress | titlecase }},
+                                {{ item.address.city | titlecase }}
+                            </p>
+
+                            <div class="medicine-info">
+                                <span class="status" [ngClass]="item.canDeliver ? 'available' : 'not-available'">
+                                    {{ item.canDeliver ? 'Home Delivery Available' : 'No Home Delivery' }}
+                                </span>
+                            </div>
+
+                            <div class="medicine-info">
+                                <span class="stock">
+                                    <strong>Contact:</strong> {{ item.contact }}
+                                </span>
+                            </div>
+
+                            <div class="medicine-info">
+                                <span class="stock">
+                                    <strong>Email:</strong> {{ item.email }}
+                                </span>
+                            </div>
+
+                            <button class="btn btn-ouline-success btn-sm" (click)="viewReviews(item, $event)">
+                                <i class="fa fa-eye"></i> View Feedback
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="selectedTab === 'others'">
+            <div class="text-center text-secondary mt-4" *ngIf="allMedicals && allMedicals.length === 0">
+                No Medical available.
+            </div>
+
+            <div class="container py-3">
+                <div class="row g-3">
+
+                    <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let item of allMedicals; let i = index">
+                        <div class="medicine-card-simple h-100" (click)="openMedicalDetails(item)">
+
+                            <div class="medicine-img-box medical-img-container">
+                                <img [src]="item.images[0]?.fullUrl" (error)="onImgError($event)" alt="medical" />
+                            </div>
+
+                            <h5 class="medicine-name fw-bold">{{ item.medicalName | titlecase }}</h5>
+
+                            <p class="medicine-desc fw-normal">
+                                {{ item.address.streetAddress | titlecase }},
+                                {{ item.address.city | titlecase }}
+                            </p>
+
+                            <div class="medicine-info">
+                                <span class="status" [ngClass]="item.canDeliver ? 'available' : 'not-available'">
+                                    {{ item.canDeliver ? 'Home Delivery Available' : 'No Home Delivery' }}
+                                </span>
+                            </div>
+
+                            <div class="medicine-info">
+                                <span class="stock">
+                                    <strong>Contact:</strong> {{ item.contact }}
+                                </span>
+                            </div>
+
+                            <div class="medicine-info">
+                                <span class="stock">
+                                    <strong>Email:</strong> {{ item.email }}
+                                </span>
+                            </div>
+                            <button class="btn btn-ouline-success btn-sm" (click)="viewReviews(item, $event)">
+                                <i class="fa fa-eye"></i> View Feedback
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div *ngIf="selectedTab === 'order'">
+            <div class="text-center text-secondary mt-4" *ngIf="buyMedicinesData && buyMedicinesData.length === 0">
+                No orders available.
+            </div>
+
+            <div class="container py-3">
+                <div class="row g-3">
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let item of buyMedicinesData; let i = index">
+
+                        <div class="umc-card-wrapper h-100">
+                            <div class="umc-card-header">
+                                <h5 class="umc-medicine-name">
+                                    {{ item.medicineDetails?.medicineName | titlecase }}
+                                </h5>
+                            </div>
+                            <div class="umc-card-body">
+                                <div class="umc-info-row">
+                                    <span class="umc-label">Quantity</span>
+                                    <span class="umc-value">
+                                        {{ item.medicineDetails?.quantity }}
+                                    </span>
+                                </div>
+
+                                <div class="umc-info-row">
+                                    <span class="umc-label">Price</span>
+                                    <span class="umc-value umc-price">
+                                        ₹ {{ item.medicineDetails?.price }}
+                                    </span>
+                                </div>
+
+                                <div class="umc-info-row">
+                                    <span class="umc-label">Status</span>
+                                    <span class="umc-value umc-price" [ngClass]="{
+                                      'status-pending': item.status === 'Pending',
+                                      'status-reject': item.status === 'Reject',
+                                      'status-accepted': item.status === 'Accept',
+                                      'status-delivered': item.status === 'Delivered'
+                                     }">
+                                        {{ item.status | titlecase }}
+                                    </span>
+                                </div>
+
+                                <div class="umc-divider"></div>
+
+                                <div class="umc-medical-name">
+                                    {{ item.medicalData?.medicalName | titlecase }}
+                                </div>
+
+                                <div class="umc-medical-address">
+                                    {{ item.medicalData?.address?.streetAddress | titlecase }},
+                                    {{ item.medicalData?.address?.city | titlecase }}
+                                </div>
+
+                            </div>
+
+                            <div class="umc-card-footer">
+                                <div class="umc-contact-row">
+                                    <span class="umc-footer-label">Contact:</span>
+                                    <span class="umc-footer-value">
+                                        {{ item.medicalData?.contact }}
+                                    </span>
+                                </div>
+
+                                <div class="umc-contact-row">
+                                    <span class="umc-footer-label">Email:</span>
+                                    <span class="umc-footer-value">
+                                        {{ item.medicalData?.email }}
+                                    </span>
+                                </div>
+                                <hr />
+                                <div class="d-flex justify-content-center">
+                                    <ng-container *ngIf="getFeedbackForItem(item._id) as feedback; else addFeedback">
+                                        <button class="btn btn-sm btn-success" (click)="viewFeedbackData(item)">
+                                            <i class="fa fa-eye"></i>
+                                            Show Feedback
+                                        </button>
+                                    </ng-container>
+
+                                    <ng-template #addFeedback>
+                                        <button class="btn btn-sm btn-success" (click)="openFeedback(item)">
+                                            <i class="fa fa-plus"></i>
+                                            Add Feedback
+                                        </button>
+                                    </ng-template>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="upload_area" class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-md z-50 p-4
+            animate-[fadeIn_.4s_ease-out]" *ngIf="isOpenViewDetails">
+
+    <div class="relative w-[95%] sm:w-[600px] max-h-[90vh] overflow-y-auto 
+               rounded-3xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30
+               p-3 sm:p-4 animate-[slideUp_.45s_cubic-bezier(0.4,0,0.2,1)]">
+
+        <button (click)="closeViewDetails()" class="sticky top-2 ml-auto bg-white/30 hover:bg-white/50 text-gray-900 font-bold 
+                       rounded-full w-8 h-8 flex items-center justify-center shadow z-50">
+            ×
+        </button>
+
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold text-white drop-shadow">Medicine Details</h2>
+            <div class="w-16 h-1 bg-white/50 mx-auto mt-2 rounded-full"></div>
+        </div>
+
+        <div class="mt-4 space-y-2 text-white">
+
+
+            <div class="bg-white/20 p-1 rounded-xl">
+                <p class="text-sm opacity-80 fw-bold ms-1">Medical Details</p>
+                <p class="text-lg font-semibold ms-1">
+                    {{medicalDetails?.medicalName | titlecase}}
+                    <br />
+                    <span class="fs-6"> {{medicalDetails?.medicalAddress | titlecase}} ({{medicalDetails?.address?.city
+                        | titlecase}}, {{medicalDetails?.address?.district| titlecase}} -
+                        {{medicalDetails?.address?.pincode}}) </span>
+                </p>
+            </div>
+
+
+            <div class="bg-white/20 p-1 rounded-xl">
+                <p class="text-sm opacity-80 fw-bold ms-1">Medicine Name</p>
+                <p class="text-lg font-semibold ms-1">{{selectedMedicine?.name | titlecase}}</p>
+            </div>
+
+            <div class="bg-white/20 p-1 rounded-xl ms-1">
+                <p class="text-sm opacity-80 fw-bold ms-1">Description</p>
+                <p class="text-base">{{selectedMedicine?.description | titlecase}}</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                <div class="bg-white/20 p-1 rounded-xl">
+                    <p class="text-sm opacity-80 fw-bold ms-1">Quantity In Stock</p>
+                    <p class="text-lg font-semibold ms-1">{{selectedMedicine?.quantityInStock}}</p>
+                </div>
+
+                <div class="bg-white/20 p-1 rounded-xl">
+                    <p class="text-sm opacity-80 fw-bold ms-1"> Home Delivery </p>
+                    <p class="text-lg font-semibold fs-6 ms-1">
+                        ({{ selectedMedicine?.availableToDispatch ? 'Available' : 'Not Available' }}) - &#8377;
+                        {{selectedMedicine?.price}}/Piece
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <p class="text-sm opacity-80 mb-2 fw-bold">Images</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div *ngFor="let img of selectedMedicine?.images">
+                        <img [src]="img?.fullUrl" class="w-full h-28 object-cover rounded-1 shadow-md border border-white/40 
+                                    hover:scale-105 transition cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-end mt-3">
+                <button (click)="buyMedicine()"
+                    class="bg-green-500/80 hover:bg-green-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa fa-shopping-cart"></i>
+                    BUY MEDICINES
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div id="cart_area" class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-md z-50 p-4
+           animate-[fadeIn_.4s_ease-out]" *ngIf="isOpenAddCart">
+
+    <div class="relative w-full max-w-[600px] max-h-[90vh]
+               rounded-3xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30
+               flex flex-col
+               animate-[slideUp_.45s_cubic-bezier(0.4,0,0.2,1)]">
+
+        <button (click)="closeCartDetails()" class="absolute top-3 right-3 bg-white/30 hover:bg-white/50 text-gray-900 font-bold
+                   rounded-full w-8 h-8 flex items-center justify-center shadow z-50">
+            ×
+        </button>
+
+        <div class="text-center px-4 pt-6">
+            <h2 class="text-3xl font-bold text-white drop-shadow">
+                Add Cart Details
+            </h2>
+            <div class="w-16 h-1 bg-white/50 mx-auto mt-2 rounded-full"></div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4 text-white">
+
+            <div class="text-sm sm:text-base">
+                <span class="opacity-80">Medicine Name:</span>
+                <span class="font-semibold ml-1">
+                    {{ selectedMedicine.name }}
+                </span>
+            </div>
+
+            <div>
+                <label class="text-sm opacity-80">Full Name</label>
+                <input type="text" [(ngModel)]="buyerName" class="w-full mt-1 bg-white/20 text-white border border-white/30 p-2 rounded-lg
+                           focus:ring-2 focus:ring-blue-300 outline-none">
+            </div>
+
+            <div>
+                <label class="text-sm opacity-80">Address for delivery</label>
+                <input type="text" [(ngModel)]="deliverAddress" class="w-full mt-1 bg-white/20 text-white border border-white/30 p-2 rounded-lg
+                           focus:ring-2 focus:ring-blue-300 outline-none">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm opacity-80">Contact</label>
+                    <input type="number" (input)="limitLength($event)" [(ngModel)]="contact" maxlength="10" class="w-full mt-1 bg-white/20 text-white border border-white/30 p-2 rounded-lg
+                               focus:ring-2 focus:ring-blue-300 outline-none">
+                </div>
+
+                <div>
+                    <label class="text-sm opacity-80">Quantity</label>
+                    <input type="number" [(ngModel)]="quantity" min="1" class="w-full mt-1 bg-white/20 text-white border border-white/30 p-2 rounded-lg
+                               focus:ring-2 focus:ring-blue-300 outline-none">
+                </div>
+            </div>
+
+            <div *ngIf="quantity" class="text-sm sm:text-base font-semibold text-green-300">
+                Price: ₹ {{ quantity * selectedMedicine.price }}
+            </div>
+
+        </div>
+
+        <div class="border-t border-white/30 bg-white/20 backdrop-blur-xl
+                   px-4 py-3 flex flex-col sm:flex-row
+                   items-center justify-between gap-3 rounded-b-3xl">
+
+            <span class="text-xs sm:text-sm text-white/80">
+                Note: Enter quantity per piece (/piece).
+            </span>
+
+            <button (click)="addMedicineToCart()" class="bg-green-500/80 hover:bg-green-600 text-white px-5 py-2 rounded-xl
+                       flex items-center gap-2 transition w-full sm:w-auto justify-center">
+                <i class="fa fa-shopping-cart"></i>
+                Add To Cart
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<div id="feedback_area" class="fixed inset-0 flex items-center justify-center
+           bg-black/40 backdrop-blur-md z-50 p-4
+           animate-[fadeIn_.4s_ease-out]" *ngIf="isOpenFeedback">
+
+    <div class="relative w-full max-w-[600px] max-h-[90vh] rounded-3xl bg-white/20 backdrop-blur-xl
+               shadow-2xl border border-white/30 flex flex-col animate-[slideUp_.45s_cubic-bezier(0.4,0,0.2,1)]">
+        <button (click)="closeFeedback()" class="absolute top-4 right-4 bg-white/30 hover:bg-white/50 text-gray-900 font-bold
+                   rounded-full w-9 h-9 flex items-center justify-center shadow z-50">
+            ×
+        </button>
+        <div class="text-center px-6 pt-8 pb-4">
+            <h2 class="text-3xl font-bold text-white drop-shadow">
+                Add Feedback
+            </h2>
+            <div class="w-16 h-1 bg-white/50 mx-auto mt-3 rounded-full"></div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-6 pb-6 space-y-6 text-white">
+            <div class="text-sm sm:text-base leading-relaxed">
+                <span class="opacity-70">Medical Name -
+                    {{ feedbackData?.medicalData?.medicalName | titlecase }}
+                    <br />
+                </span>
+                <p class="font-semibold mt-1">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {{ feedbackData?.medicalData?.medicalAddress | titlecase }}
+                </p>
+                <div class="space-y-2">
+                    <label class="text-sm opacity-80">Your Rating</label>
+                    <div class="flex items-center gap-3 text-3xl">
+                        <span *ngFor="let star of [1,2,3,4,5]" class="cursor-pointer transition-transform duration-200"
+                            [class.text-yellow-400]="(hoverRating || rating) >= star"
+                            [class.opacity-40]="(hoverRating || rating) < star" (mouseenter)="setHover(star)"
+                            (mouseleave)="clearHover()" (click)="setRating(star)">
+                            ★
+                        </span>
+                    </div>
+                    <p class="text-xs opacity-70" *ngIf="rating">
+                        You rated {{ rating }} out of 5
+                    </p>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm opacity-80">Your Feedback</label>
+                    <textarea [(ngModel)]="feedbackText" rows="4" placeholder="Share your experience..." class="w-full rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white/80 placeholder-white/20
+                           px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none">
+                </textarea>
+                </div>
+            </div>
+            <div class="border-t border-white/30 bg-white/20 backdrop-blur-xl
+                   px-6 py-4 rounded-b-3xl flex justify-center">
+                <button (click)="addFeedbackToCart()" [disabled]="rating === 0 || !feedbackText" class="bg-green-500/80 hover:bg-green-600 disabled:opacity-40 text-white px-6 py-2.5
+                       rounded-xl flex items-center gap-2 transition w-full sm:w-auto justify-center">
+                    <i class="fa fa-star"></i>
+                    Submit Feedback
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="view_feedback_area" class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-md z-50 p-4
+            animate-[fadeIn_.4s_ease-out]" *ngIf="isViewFeedbackDetail">
+
+    <div class="relative w-[95%] sm:w-[500px] max-h-[90vh] overflow-y-auto 
+               rounded-3xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30
+               p-3 sm:p-4 animate-[slideUp_.45s_cubic-bezier(0.4,0,0.2,1)]">
+
+        <button (click)="closeFeedbackDetail()" class="sticky top-2 ml-auto bg-white/30 hover:bg-white/50 text-gray-900 font-bold 
+                       rounded-full w-8 h-8 flex items-center justify-center shadow z-50">
+            ×
+        </button>
+
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold text-white drop-shadow"> Feedback Details </h2>
+            <div class="w-16 h-1 bg-white/50 mx-auto mt-2 rounded-full"></div>
+        </div>
+
+        <div class="space-y-4 text-white">
+
+            <div *ngFor="let feedback of feedbackList" class="rounded-2xl bg-white/20 backdrop-blur-lg
+               border border-white/30 p-4 space-y-3">
+
+                <div class="flex items-center gap-1 text-xl">
+                    <span *ngFor="let star of [1,2,3,4,5]" [class.text-yellow-400]="feedback.rating >= star"
+                        [class.opacity-30]="feedback.rating < star">
+                        ★
+                    </span>
+
+                    <span class="text-xs opacity-70 ml-2">
+                        ({{ feedback.rating }}/5)
+                    </span>
+                </div>
+
+                <p class="text-sm opacity-90 leading-relaxed">
+                    “{{ feedback.feedbackMessage }}”
+                </p>
+
+                <div class="text-xs opacity-60 text-right">
+                    {{ feedback.createdAt | date:'dd MMM yyyy, hh:mm a' }}
+                </div>
+
+            </div>
+
+            <div *ngIf="feedbackList && feedbackList.length === 0" class="text-center text-sm opacity-70 py-6">
+                No feedback available
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+
+<div id="view_feedback_area" class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-md z-50 p-4
+            animate-[fadeIn_.4s_ease-out]" *ngIf="isOpenReviews">
+
+    <div class="relative w-[95%] sm:w-[500px] max-h-[90vh] overflow-y-auto 
+               rounded-3xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30
+               p-3 sm:p-4 animate-[slideUp_.45s_cubic-bezier(0.4,0,0.2,1)]">
+
+        <button (click)="closeReviews()" class="sticky top-2 ml-auto bg-white/30 hover:bg-white/50 text-gray-900 font-bold 
+                       rounded-full w-8 h-8 flex items-center justify-center shadow z-50">
+            ×
+        </button>
+
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold text-white drop-shadow"> Feedback Details </h2>
+            <div class="w-16 h-1 bg-white/50 mx-auto mt-2 rounded-full"></div>
+        </div>
+
+        <div class="space-y-4 text-white">
+
+            <div *ngFor="let feedback of feedbackListArea" class="rounded-2xl bg-white/20 backdrop-blur-lg
+               border border-white/30 p-4 space-y-3">
+
+                <div class="flex items-center gap-1 text-xl">
+                    <span *ngFor="let star of [1,2,3,4,5]" [class.text-yellow-400]="feedback.rating >= star"
+                        [class.opacity-30]="feedback.rating < star">
+                        ★
+                    </span>
+
+                    <span class="text-xs opacity-70 ml-2">
+                        ({{ feedback.rating }}/5)
+                    </span>
+                </div>
+
+                <p class="text-sm opacity-90 leading-relaxed">
+                    “{{ feedback.feedbackMessage }}”
+                </p>
+
+                <div class="text-xs opacity-60 text-right">
+                    {{ feedback.createdAt | date:'dd MMM yyyy, hh:mm a' }}
+                </div>
+
+            </div>
+
+            <div *ngIf="feedbackList && feedbackList.length === 0" class="text-center text-sm opacity-70 py-6">
+                No feedback available
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

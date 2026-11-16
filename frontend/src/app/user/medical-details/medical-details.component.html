@@ -1,0 +1,219 @@
+
+<div id="area" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white w-[90%] sm:w-[1200px] rounded-1 shadow-2xl p-6 sm:p-8 relative animate-fadeIn">
+        <div class="d-flex justify-content-between align-items-center align-content-center">
+            <p class="text-dark fw-bold fs-6"> Medicine Details </p>
+            <button type="button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-xl"
+                (click)="closeModal()">
+                &times;
+            </button>
+        </div>
+
+        <div class="d-flex justify-content-center align-content-center align-items-center"
+            *ngIf="filteredMedicineData && filteredMedicineData.length === 0">
+            <p class="text-dark fs-6 fw-normal"> No medicine available </p>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let item of filteredMedicineData; let i = index;">
+                <div class="medicine-card-simple h-100" (click)="viewDetails(item)">
+
+                    <div class="medicine-img-box">
+                        <img [src]="item.images[1]?.fullUrl" (error)="onImgError($event)" alt="medicine" />
+                    </div>
+                    <h5 class="medicine-name">{{ item.name | titlecase}}</h5>
+                    <p class="medicine-desc">
+                        <span *ngIf="!expandedDesc[i]">
+                            {{ getShortText(item.description) }}
+                        </span>
+
+                        <span *ngIf="expandedDesc[i]">
+                            {{ item.description }}
+                        </span>
+                    </p>
+                    <button class="show-more-btn" *ngIf="isDescriptionLong(item.description)"
+                        (click)="toggleDescription(i)">
+                        {{ expandedDesc[i] ? 'Show Less' : 'Show More' }}
+                    </button>
+
+                    <div class="medicine-info">
+                        <span class="stock">Stock: {{ item.quantityInStock }}
+                            <br />
+                            &#8377; {{item?.price}}/Piece
+                        </span>
+
+                        <span class="status" [ngClass]="item.availableToDispatch ? 'available' : 'not-available'">
+                            {{ item.availableToDispatch ? 'Available to deliver' : 'Not Available to deliver' }}
+                        </span>
+                    </div>
+                    <div class="footer-text">
+                        Added on: {{ item.createdAt | date:'MMM d, y' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="upload_area" class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-md z-50 p-4
+            animate-[fadeIn_.4s_ease-out]" *ngIf="isOpenViewDetails">
+
+    <div class="relative w-[95%] sm:w-[600px] max-h-[90vh] overflow-y-auto 
+               rounded-3xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30
+               p-3 sm:p-4 animate-[slideUp_.45s_cubic-bezier(0.4,0,0.2,1)]">
+
+        <button (click)="closeViewDetails()" class="sticky top-2 ml-auto bg-white/30 hover:bg-white/50 text-gray-900 font-bold 
+                       rounded-full w-8 h-8 flex items-center justify-center shadow z-50">
+            ×
+        </button>
+
+
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold text-white drop-shadow">Medicine Details</h2>
+            <div class="w-16 h-1 bg-white/50 mx-auto mt-2 rounded-full"></div>
+        </div>
+
+        <div class="mt-4 space-y-2 text-white">
+
+            <div>
+                <p class="fw-bold fs-6"> {{data.medicalName | titlecase}} -
+                    <span class="fw-normal fs-6"> {{data.medicalAddress | titlecase}} </span>
+                </p>
+            </div>
+
+            <div class="bg-white/20 p-1 rounded-xl">
+                <p class="text-sm opacity-80 fw-bold ms-1">Medicine Name</p>
+                <p class="text-lg font-semibold ms-1">{{selectedMedicine?.name}}</p>
+            </div>
+
+            <div class="bg-white/20 p-1 rounded-xl ms-1">
+                <p class="text-sm opacity-80 fw-bold ms-1">Description</p>
+                <p class="text-base">{{selectedMedicine?.description}}</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                <div class="bg-white/20 p-1 rounded-xl">
+                    <p class="text-sm opacity-80 fw-bold ms-1">Quantity In Stock</p>
+                    <p class="text-lg font-semibold ms-1">{{selectedMedicine?.quantityInStock}}</p>
+                </div>
+
+                <div class="bg-white/20 p-1 rounded-xl">
+                    <p class="text-sm opacity-80 fw-bold ms-1">Home Delivery</p>
+                    <p class="text-lg fs-6 font-semibold ms-1">
+                        ({{ selectedMedicine?.availableToDispatch ? 'Available' : 'Not Available' }}) - &#8377;
+                        {{selectedMedicine?.price}}/Piece
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <p class="text-sm opacity-80 mb-2 fw-bold">Images</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div *ngFor="let img of selectedMedicine?.images">
+                        <img [src]="img?.fullUrl" class="w-full h-28 object-cover rounded-xl shadow-md border border-white/40 
+                                    hover:scale-105 transition cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-end mt-3">
+                <button (click)="buyMedicine()"
+                    class="bg-green-500/80 hover:bg-green-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa fa-shopping-cart"></i>
+                    BUY MEDICINES
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div id="cart_area" class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-md z-50 p-4
+           animate-[fadeIn_.4s_ease-out]" *ngIf="isOpenAddCart">
+
+    <div class="relative w-full max-w-[600px] max-h-[90vh]
+               rounded-3xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30
+               flex flex-col
+               animate-[slideUp_.45s_cubic-bezier(0.4,0,0.2,1)]">
+
+        <button (click)="closeCartDetails()" class="absolute top-3 right-3 bg-white/30 hover:bg-white/50 text-gray-900 font-bold
+                   rounded-full w-8 h-8 flex items-center justify-center shadow z-50">
+            ×
+        </button>
+
+        <div class="text-center px-4 pt-6">
+            <h2 class="text-3xl font-bold text-white drop-shadow">
+                Add Cart Details
+            </h2>
+            <div class="w-16 h-1 bg-white/50 mx-auto mt-2 rounded-full"></div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4 text-white">
+
+            <div class="text-sm sm:text-base">
+                <span class="opacity-80">Medicine Name:</span>
+                <span class="font-semibold ml-1">
+                    {{ selectedMedicine.name }}
+                </span>
+            </div>
+
+            <div>
+                <label class="text-sm opacity-80">Full Name</label>
+                <input type="text" [(ngModel)]="buyerName" class="w-full mt-1 bg-white/20 text-white border border-white/30 p-2 rounded-lg
+                           focus:ring-2 focus:ring-blue-300 outline-none">
+            </div>
+
+            <div>
+                <label class="text-sm opacity-80">Address for delivery</label>
+                <input type="text" [(ngModel)]="deliverAddress" class="w-full mt-1 bg-white/20 text-white border border-white/30 p-2 rounded-lg
+                           focus:ring-2 focus:ring-blue-300 outline-none">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm opacity-80">Contact</label>
+                    <input type="number" (input)="limitLength($event)" [(ngModel)]="contact" maxlength="10" class="w-full mt-1 bg-white/20 text-white border border-white/30 p-2 rounded-lg
+                               focus:ring-2 focus:ring-blue-300 outline-none">
+                </div>
+
+                <div>
+                    <label class="text-sm opacity-80">Quantity</label>
+                    <input type="number" [(ngModel)]="quantity" min="1" class="w-full mt-1 bg-white/20 text-white border border-white/30 p-2 rounded-lg
+                               focus:ring-2 focus:ring-blue-300 outline-none">
+                </div>
+            </div>
+
+            <div *ngIf="quantity" class="text-sm sm:text-base font-semibold text-green-300">
+                Price: ₹ {{ quantity * selectedMedicine.price }}
+            </div>
+
+        </div>
+
+        <div class="border-t border-white/30 bg-white/20 backdrop-blur-xl
+                   px-4 py-3 flex flex-col sm:flex-row
+                   items-center justify-between gap-3 rounded-b-3xl">
+
+            <span class="text-xs sm:text-sm text-white/80">
+                Note: Enter quantity per piece (/piece).
+            </span>
+
+            <button (click)="addMedicineToCart()" class="bg-green-500/80 hover:bg-green-600 text-white px-5 py-2 rounded-xl
+                       flex items-center gap-2 transition w-full sm:w-auto justify-center">
+                <i class="fa fa-shopping-cart"></i>
+                Add To Cart
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+

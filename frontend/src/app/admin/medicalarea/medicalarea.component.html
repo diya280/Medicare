@@ -1,0 +1,129 @@
+<div id="area" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white w-[90%] sm:w-[1200px] rounded-1 shadow-2xl p-6 sm:p-8 relative animate-fadeIn">
+        <div class="d-flex justify-content-between align-items-center align-content-center">
+            <p class="text-dark fw-bold fs-6"> Medicine Details </p>
+            <button type="button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-xl"
+                (click)="closeModal()">
+                &times;
+            </button>
+        </div>
+
+        <div class="d-flex justify-content-center align-content-center align-items-center"
+            *ngIf="filteredMedicineData && filteredMedicineData.length === 0">
+            <p class="text-dark fs-6 fw-normal"> No medicine available </p>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let item of filteredMedicineData; let i = index;">
+                <div class="medicine-card-simple h-100">
+
+                    <div class="medicine-img-box">
+                        <img [src]="item.images[1]?.fullUrl" (error)="onImgError($event)" alt="medicine" />
+                    </div>
+                    <h5 class="medicine-name">{{ item.name | titlecase}}</h5>
+                    <p class="medicine-desc">
+                        <span *ngIf="!expandedDesc[i]">
+                            {{ getShortText(item.description) }}
+                        </span>
+
+                        <span *ngIf="expandedDesc[i]">
+                            {{ item.description }}
+                        </span>
+                    </p>
+                    <button class="show-more-btn" *ngIf="isDescriptionLong(item.description)"
+                        (click)="toggleDescription(i)">
+                        {{ expandedDesc[i] ? 'Show Less' : 'Show More' }}
+                    </button>
+
+                    <!-- <div class="medicine-info">
+                        <span class="stock">Stock: {{ item.quantityInStock }}
+                            <br />
+                            &#8377; {{item?.price}}/Piece
+                        </span>
+
+                        <span class="status" [ngClass]="item.availableToDispatch ? 'available' : 'not-available'">
+                            {{ item.availableToDispatch ? 'Available to deliver' : 'Not Available to deliver' }}
+                        </span>
+                    </div> -->
+
+                    <div class="medicine-info">
+                        <span class="stock">
+                            Stock: {{ item.quantityInStock }}
+                            <br />
+                            &#8377; {{item?.price}}/Piece
+                        </span>
+
+                        <span class="status" [ngClass]="item.availableToDispatch ? 'available' : 'not-available'">
+                            {{ item.availableToDispatch ? 'Available to deliver' : 'Not Available to deliver' }}
+                        </span>
+                    </div>
+
+                    <div class="medicine-actions d-flex justify-content-center align-items-center mt-1">
+                        <button class="btn btn-outline-success btn-sm" (click)="viewReviews(item)">
+                            View Reviews
+                        </button>
+                    </div>
+
+                    <div class="footer-text">
+                        Added on: {{ item.createdAt | date:'MMM d, y' }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="view_feedback_area" class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-md z-50 p-4
+            animate-[fadeIn_.4s_ease-out]" *ngIf="isOpenReviews">
+
+    <div class="relative w-[95%] sm:w-[500px] max-h-[90vh] overflow-y-auto 
+               rounded-3xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30
+               p-3 sm:p-4 animate-[slideUp_.45s_cubic-bezier(0.4,0,0.2,1)]">
+
+        <button (click)="closeReviews()" class="sticky top-2 ml-auto bg-white/30 hover:bg-white/50 text-gray-900 font-bold 
+                       rounded-full w-8 h-8 flex items-center justify-center shadow z-50">
+            ×
+        </button>
+
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold text-white drop-shadow"> Feedback Details </h2>
+            <div class="w-16 h-1 bg-white/50 mx-auto mt-2 rounded-full"></div>
+        </div>
+
+        <div class="space-y-4 text-white">
+
+            <div *ngFor="let feedback of feedbackList" class="rounded-2xl bg-white/20 backdrop-blur-lg
+               border border-white/30 p-4 space-y-3">
+
+                <div class="flex items-center gap-1 text-xl">
+                    <span *ngFor="let star of [1,2,3,4,5]" [class.text-yellow-400]="feedback.rating >= star"
+                        [class.opacity-30]="feedback.rating < star">
+                        ★
+                    </span>
+
+                    <span class="text-xs opacity-70 ml-2">
+                        ({{ feedback.rating }}/5)
+                    </span>
+                </div>
+
+                <p class="text-sm opacity-90 leading-relaxed">
+                    “{{ feedback.feedbackMessage }}”
+                </p>
+
+                <div class="text-xs opacity-60 text-right">
+                    {{ feedback.createdAt | date:'dd MMM yyyy, hh:mm a' }}
+                </div>
+
+            </div>
+
+            <div *ngIf="feedbackList && feedbackList.length === 0" class="text-center text-sm opacity-70 py-6">
+                No feedback available
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
