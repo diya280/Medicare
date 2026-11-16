@@ -250,9 +250,9 @@
 
             <ng-container *ngFor="let med of uploadedImages">
 
-                <div *ngFor="let img of med.images" class="relative group rounded-xl overflow-hidden">
+                <div *ngFor="let img of med.photos" class="relative group rounded-xl overflow-hidden">
 
-                    <img [src]="img.fullUrl" (click)="openFullImage(img.fullUrl)" class="w-full h-32 sm:h-36 object-cover rounded-xl 
+                    <img [src]="img.url" (click)="openFullImage(img.url)" class="w-full h-32 sm:h-36 object-cover rounded-xl 
                     border border-white/30 shadow-md cursor-pointer
                     group-hover:scale-105 transition-all duration-300" />
 

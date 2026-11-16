@@ -45,7 +45,7 @@
                     <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let item of filteredMedicineData; let i = index;">
                         <div class="medicine-card-simple h-100" (click)="viewMedicineDetails(item)">
                             <div class="medicine-img-box">
-                                <img [src]="item.images[1]?.fullUrl" (error)="onImgError($event)" alt="medicine" />
+                                <img [src]="item.photos[0]?.url" (error)="onImgError($event)" alt="medicine" />
                             </div>
                             <h5 class="medicine-name">{{ item.name | titlecase}}</h5>
                             <p class="medicine-desc">
@@ -95,7 +95,7 @@
                         <div class="medicine-card-simple h-100" (click)="openMedicalDetails(item)">
 
                             <div class="medicine-img-box medical-img-container">
-                                <img [src]="item.images[0]?.fullUrl" (error)="onImgError($event)" alt="medical" />
+                                <img [src]="item.photos[0]?.url" (error)="onImgError($event)" alt="medical" />
                             </div>
 
                             <h5 class="medicine-name fw-bold">{{ item.medicalName | titlecase }}</h5>
@@ -146,7 +146,7 @@
                         <div class="medicine-card-simple h-100" (click)="openMedicalDetails(item)">
 
                             <div class="medicine-img-box medical-img-container">
-                                <img [src]="item.images[0]?.fullUrl" (error)="onImgError($event)" alt="medical" />
+                                <img [src]="item.photos[0]?.url" (error)="onImgError($event)" alt="medical" />
                             </div>
 
                             <h5 class="medicine-name fw-bold">{{ item.medicalName | titlecase }}</h5>
@@ -348,8 +348,8 @@
             <div>
                 <p class="text-sm opacity-80 mb-2 fw-bold">Images</p>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <div *ngFor="let img of selectedMedicine?.images">
-                        <img [src]="img?.fullUrl" class="w-full h-28 object-cover rounded-1 shadow-md border border-white/40 
+                    <div *ngFor="let img of selectedMedicine?.photos">
+                        <img [src]="img?.url" class="w-full h-28 object-cover rounded-1 shadow-md border border-white/40 
                                     hover:scale-105 transition cursor-pointer">
                     </div>
                 </div>

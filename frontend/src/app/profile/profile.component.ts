@@ -218,14 +218,15 @@ export class ProfileComponent implements OnInit {
     this.authService.getUploadImages(data).subscribe((res: any) => {
       if (res.status === 'Success' && res.data && res.data.length > 0) {
         this.isImgUploaded = true;
-        this.uploadedImages = res.data.map((item: any) => {
-          item.images = item.images.map((img: any) => ({
-            getId: item._id,
-            ...img,
-            fullUrl: this.BASE_URL + img.url
-          }));
-          return item;
-        });
+        this.uploadedImages = res.data;
+        // .map((item: any) => {
+        //   item.images = item.images.map((img: any) => ({
+        //     getId: item._id,
+        //     ...img,
+        //     fullUrl: this.BASE_URL + img.url
+        //   }));
+        //   return item;
+        // });
       } else {
         this.closeUploadModal();
         this.isViewImages = false;

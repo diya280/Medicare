@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const medicalImageSchema = new mongoose.Schema({
     userId: {
-        type: String, 
+        type: String,
         required: true,
         ref: 'User'
     },
@@ -14,14 +14,15 @@ const medicalImageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    status:{
+    status: {
         type: String,
         required: true
     },
-    images: [
+    photos: [
         {
             filename: { type: String, required: true },
-            url: { type: String, required: true } 
+            url: { type: String, required: true },
+            publicId: { type: String }
         }
     ],
     createdAt: {

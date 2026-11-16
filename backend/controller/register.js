@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const fs = require("fs");
 const path = require("path");
 const MedicalImages = require('../models/medicalUpload');
+const uploadBase64Image = require("../utils/cloudinaryUpload");
+
 
 async function addUser(req, res, next) {
   try {
@@ -531,56 +533,111 @@ async function updateUserDetails(req, res) {
 }
 
 
+// async function uploadMedicalImages(req, res, next) {
+//   try {
+//     const { images, medicalName, medicalAddress, userId } = req.body;
+
+//     if (!images || !Array.isArray(images) || images.length === 0) {
+//       return res.status(400).json({ message: "No images provided" });
+//     }
+
+//     const uploadDir = path.join(__dirname, '../public/images');
+//     if (!fs.existsSync(uploadDir)) {
+//       fs.mkdirSync(uploadDir, { recursive: true });
+//     }
+
+//     let savedRecords = [];
+
+//     for (let i = 0; i < images.length; i++) {
+//       const base64Str = images[i];
+//       const base64Data = base64Str.replace(/^data:image\/\w+;base64,/, "");
+
+//       const filename = `${Date.now()}_${i}.png`;
+//       const filePath = path.join(uploadDir, filename);
+
+//       fs.writeFileSync(filePath, base64Data, 'base64');
+
+//       const newRecord = new MedicalImages({
+//         userId,
+//         medicalName,
+//         medicalAddress,
+//         images: [{
+//           filename,
+//           url: `/public/images/${filename}`
+//         }],
+//         status: "Active"
+//       });
+
+//       const saved = await newRecord.save();
+//       savedRecords.push(saved);
+//     }
+
+//     res.status(200).json({
+//       status: "Success",
+//       message: "Images uploaded separately and saved successfully",
+//       data: savedRecords
+//     });
+
+//   } catch (error) {
+//     console.error("Error uploading images:", error);
+//     res.status(500).json({ message: "Server error", error });
+//   }
+// }
+
+
+
+
+
 async function uploadMedicalImages(req, res, next) {
-  try {
-    const { images, medicalName, medicalAddress, userId } = req.body;
+    try {
+        const { images, medicalName, medicalAddress, userId } = req.body;
 
-    if (!images || !Array.isArray(images) || images.length === 0) {
-      return res.status(400).json({ message: "No images provided" });
+        if (!Array.isArray(images) || images.length === 0) {
+            return res.status(400).json({
+                status: "Error",
+                message: "No images provided"
+            });
+        }
+
+        const uploadedImages = await Promise.all(
+            images.map(image =>
+                uploadBase64Image(image, "medicare/medical-images")
+            )
+        );
+
+        const savedRecords = [];
+
+        for (const image of uploadedImages) {
+            const newRecord = new MedicalImages({
+                userId,
+                medicalName,
+                medicalAddress,
+                photos: [image],
+                status: "Active"
+            });
+
+            const saved = await newRecord.save();
+            savedRecords.push(saved);
+        }
+
+        return res.status(200).json({
+            status: "Success",
+            message: "Images uploaded successfully",
+            data: savedRecords
+        });
+
+    } catch (error) {
+        console.error("Error uploading medical images:", error);
+
+        return res.status(500).json({
+            status: "Error",
+            message: "Medical image upload failed",
+            error: error.message
+        });
     }
-
-    const uploadDir = path.join(__dirname, '../public/images');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    let savedRecords = [];
-
-    for (let i = 0; i < images.length; i++) {
-      const base64Str = images[i];
-      const base64Data = base64Str.replace(/^data:image\/\w+;base64,/, "");
-
-      const filename = `${Date.now()}_${i}.png`;
-      const filePath = path.join(uploadDir, filename);
-
-      fs.writeFileSync(filePath, base64Data, 'base64');
-
-      const newRecord = new MedicalImages({
-        userId,
-        medicalName,
-        medicalAddress,
-        images: [{
-          filename,
-          url: `/public/images/${filename}`
-        }],
-        status: "Active"
-      });
-
-      const saved = await newRecord.save();
-      savedRecords.push(saved);
-    }
-
-    res.status(200).json({
-      status: "Success",
-      message: "Images uploaded separately and saved successfully",
-      data: savedRecords
-    });
-
-  } catch (error) {
-    console.error("Error uploading images:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
 }
+
+
 
 
 async function getMedicalImagesByUserId(req, res, next) {
@@ -650,10 +707,10 @@ async function deleteMedicalImagebyUserId(req, res) {
 
 
 async function getDataByRole(req, res, next) {
-  try{
-    const {role} = req.body;
+  try {
+    const { role } = req.body;
 
-    if(!role){
+    if (!role) {
       return res.status(400).json({
         status: 'Failed',
         message: 'Role is required'
@@ -661,8 +718,8 @@ async function getDataByRole(req, res, next) {
     }
 
 
-    const data = await register.find({role: role})
-    
+    const data = await register.find({ role: role })
+
     res.status(200).json({
       status: 'Success',
       message: 'Successfully data get by the role',
@@ -670,11 +727,11 @@ async function getDataByRole(req, res, next) {
     })
 
 
-  }catch(err){
+  } catch (err) {
     console.error('Error at getDataByRole', err);
     return res.status(500).json({
-      status: 'Failed', 
-      message: 'Internal server error', 
+      status: 'Failed',
+      message: 'Internal server error',
       error: err
     })
   }
@@ -686,7 +743,8 @@ async function getDataByRole(req, res, next) {
 
 
 
-module.exports = { addUser, userLogin, updateUserDetails, uploadMedicalImages, getMedicalImagesByUserId, deleteMedicalImagebyUserId, getLoginUser, 
+module.exports = {
+  addUser, userLogin, updateUserDetails, uploadMedicalImages, getMedicalImagesByUserId, deleteMedicalImagebyUserId, getLoginUser,
   getDetailById,
   createCamp, getCampById, getAllCamps, addMember, getAttendeesById, filterByAddress, getDataByRole,
 

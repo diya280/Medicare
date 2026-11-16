@@ -18,7 +18,7 @@
                 <div class="medicine-card-simple h-100">
 
                     <div class="medicine-img-box">
-                        <img [src]="item.images[1]?.fullUrl" (error)="onImgError($event)" alt="medicine" />
+                        <img [src]="item.photos[0]?.url" (error)="onImgError($event)" alt="medicine" />
                     </div>
                     <h5 class="medicine-name">{{ item.name | titlecase}}</h5>
                     <p class="medicine-desc">

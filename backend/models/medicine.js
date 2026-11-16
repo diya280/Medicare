@@ -21,17 +21,18 @@ const medicineSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    photos:[
-    {
-        filename: { type: String, required: true },
-        url: { type: String, required: true }
-    }
-],
+    photos: [
+        {
+            filename: { type: String, required: true },
+            url: { type: String, required: true },
+            publicId: { type: String }
+        }
+    ],
     userId: {
         type: String,
         required: true
     },
-    price:{
+    price: {
         type: Number,
         required: true
     }

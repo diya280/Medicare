@@ -77,18 +77,18 @@ export class ViewareaComponent {
     }
     this.authService.getMedicalImagesByIdArray(data).subscribe((res: any) => {
 
-      const medicalImages = res.data.map((item: any) => {
-        item.images = item.images.map((img: any) => ({
-          getId: item._id,
-          ...img,
-          fullUrl: this.BASE_URL + img.url
-        }));
-        return item;
-      });
+      const medicalImages = res.data
+      // .map((item: any) => {
+      //   item.images = item.images.map((img: any) => ({
+      //     getId: item._id,
+      //     ...img,
+      //     fullUrl: this.BASE_URL + img.url
+      //   }));
+      //   return item;
+      // });
 
       this.medicalData = details.map((user: any) => {
-        const userImages = medicalImages
-          .filter((img: any) => img.userId === user._id)
+        const userImages = medicalImages.filter((img: any) => img.userId === user._id)
           .map((img: any) => img.images).flat();
         return {
           ...user,
@@ -117,14 +117,16 @@ export class ViewareaComponent {
       userId: medicalId
     }
     this.authService.getMedicalImagesByIdArray(data).subscribe((res: any) => {
-      const medicalImages = res.data.map((item: any) => {
-        item.images = item.images.map((img: any) => ({
-          getId: item._id,
-          ...img,
-          fullUrl: this.BASE_URL + img.url
-        }));
-        return item;
-      });
+      const medicalImages = res.data
+      // .map((item: any) => {
+      //   item.images = item.images
+      //   .map((img: any) => ({
+      //     getId: item._id,
+      //     ...img,
+      //     fullUrl: this.BASE_URL + img.url
+      //   }));
+      //   return item;
+      // });
 
       this.allMedicals = details.map((user: any) => {
         const userImages = medicalImages
@@ -183,12 +185,13 @@ export class ViewareaComponent {
 
     this.authService.getAllMedicineDataByCity(data).subscribe((res: any) => {
       if (res.status === 'Success' && res.data && res.data.length > 0) {
-        this.medicineData = res.data.map((item: any) => {
-          item.images = item.photos.map((img: any) => ({
-            fullUrl: this.BASE_URL + img.url
-          }));
-          return item;
-        });
+        this.medicineData = res.data;
+        // .map((item: any) => {
+        //   item.images = item.photos.map((img: any) => ({
+        //     fullUrl: this.BASE_URL + img.url
+        //   }));
+        //   return item;
+        // });
         this.filteredMedicineData = [...this.medicineData];
       }
 

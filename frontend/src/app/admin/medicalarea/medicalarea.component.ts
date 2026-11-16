@@ -51,12 +51,13 @@ export class MedicalareaComponent implements OnInit {
     }
     this.authService.getMedicineDetails(data).subscribe((res: any) => {
       if (res.status === 'Success' && res.data && res.data.length > 0) {
-        const medicineData = res.data.map((item: any) => {
-          item.images = item.photos.map((img: any) => ({
-            fullUrl: this.BASE_URL + img.url
-          }));
-          return item;
-        });
+        const medicineData = res.data;
+        // .map((item: any) => {
+        //   item.images = item.photos.map((img: any) => ({
+        //     fullUrl: this.BASE_URL + img.url
+        //   }));
+        //   return item;
+        // });
         this.filteredMedicineData = [...medicineData];
       }
     }, (err: any) => {
