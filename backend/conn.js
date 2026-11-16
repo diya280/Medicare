@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 
 async function databaseConnection() {
     try {
-        const url = process.env.MONGO_URI;
+        const url = process.env.MONGODB_URI;
 
         if (!url) {
-            throw new Error('MONGO_URI is missing');
+            throw new Error('MONGODB_URI is missing');
         }
 
         await mongoose.connect(url);
